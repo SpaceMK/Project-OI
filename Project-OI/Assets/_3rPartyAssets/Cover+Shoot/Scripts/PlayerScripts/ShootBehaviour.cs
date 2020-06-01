@@ -33,7 +33,7 @@ public class ShootBehaviour : GenericBehaviour
 		reloadBool;                                                // Animator variable related to reloading.
 	private bool isAiming,                                         // Boolean to get whether or not the player is aiming.
 		isAimBlocked;                                              // Boolean to determine whether or not the aim is blocked.
-	private Transform gunMuzzle;                                   // World position of the gun muzzle.
+    private Transform gunMuzzle;                                   // World position of the gun muzzle.
 	private float distToHand;                                      // Distance from neck to hand.
 	private Vector3 castRelativeOrigin;                            // Position of neck to cast for blocked aim test.
 	private Dictionary<InteractiveWeapon.WeaponType, int> slotMap; // Map to designate weapon types to inventory slots.

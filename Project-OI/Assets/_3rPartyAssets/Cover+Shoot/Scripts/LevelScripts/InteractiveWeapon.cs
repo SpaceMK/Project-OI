@@ -37,11 +37,10 @@ public class InteractiveWeapon : MonoBehaviour
 	private Rigidbody rbody;                                  // Weapon rigidbody.
 	private WeaponUIManager weaponHud;                        // Reference to on-screen weapon HUD.
 	private bool pickable;                                    // Boolean to store whether or not the weapon is pickable (player within radius).
-	private Transform pickupHUD;                              // Reference to the weapon pickup in-game label.
+	//private Transform pickupHUD;                              // Reference to the weapon pickup in-game label.
 
 	void Awake()
 	{
-		// Set up the references.
 		this.gameObject.name = this.label;
 		this.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
 		foreach (Transform t in this.transform)
@@ -50,16 +49,6 @@ public class InteractiveWeapon : MonoBehaviour
 		}
 		player = GameObject.FindGameObjectWithTag("Player");
 		playerInventory = player.GetComponent<ShootBehaviour>();
-		gameController = GameObject.FindGameObjectWithTag("GameController");
-		// Assert that exists a on-screen HUD.
-		if (GameObject.Find("ScreenHUD") == null)
-		{
-			Debug.LogError("No ScreenHUD canvas found. Create ScreenHUD inside the GameController");
-		}
-		weaponHud = GameObject.Find("ScreenHUD").GetComponent<WeaponUIManager>();
-		pickupHUD = gameController.transform.Find("PickupHUD");
-
-		// Create physics components and radius of interaction.
 		col = this.transform.GetChild(0).gameObject.AddComponent<BoxCollider>();
 		CreateInteractiveRadius(col.center);
 		this.rbody = this.gameObject.AddComponent<Rigidbody>();
@@ -70,17 +59,8 @@ public class InteractiveWeapon : MonoBehaviour
 			Debug.LogWarning("Set correct weapon slot ( 1 - small/ 2- big)");
 			type = WeaponType.SHORT;
 		}
-
-		// Assert that the gun muzzle is exists.
-		if(!this.transform.Find("muzzle"))
-		{
-			Debug.LogError(this.name+" muzzle is not present. Create a game object named 'muzzle' as a child of this game object");
-		}
-
-		// Set default values.
 		fullMag = mag;
 		maxBullets = totalBullets;
-		pickupHUD.gameObject.SetActive(false);
 	}
 
 	// Create the sphere of interaction with player.
@@ -144,15 +124,15 @@ public class InteractiveWeapon : MonoBehaviour
 	// Draw in-game weapon pickup label.
 	private void TooglePickupHUD(bool toogle)
 	{
-		pickupHUD.gameObject.SetActive(toogle);
-		if (toogle)
-		{
-			pickupHUD.position = this.transform.position + Vector3.up * 0.5f;
-			Vector3 direction = player.GetComponent<BasicBehaviour>().playerCamera.forward;
-			direction.y = 0f;
-			pickupHUD.rotation = Quaternion.LookRotation(direction);
-			pickupHUD.Find("Label").GetComponent<Text>().text = "Pick "+this.gameObject.name;
-		}
+		//pickupHUD.gameObject.SetActive(toogle);
+		//if (toogle)
+		//{
+		//	pickupHUD.position = this.transform.position + Vector3.up * 0.5f;
+		//	Vector3 direction = player.GetComponent<BasicBehaviour>().playerCamera.forward;
+		//	direction.y = 0f;
+		//	pickupHUD.rotation = Quaternion.LookRotation(direction);
+		//	pickupHUD.Find("Label").GetComponent<Text>().text = "Pick "+this.gameObject.name;
+		//}
 	}
 
 	// Manage weapon active status.
