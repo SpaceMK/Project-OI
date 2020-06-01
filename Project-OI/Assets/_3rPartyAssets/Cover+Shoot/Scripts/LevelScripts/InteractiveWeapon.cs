@@ -4,31 +4,18 @@ using UnityEngine.UI;
 // This class corresponds to any in-game weapon interactions.
 public class InteractiveWeapon : MonoBehaviour
 {
-	public string label;                                      // The weapon name. Same name will treat weapons as same regardless game object's name.
-	public AudioClip shotSound, reloadSound,                  // Audio clips for shoot and reload.
-		pickSound, dropSound;                                 // Audio clips for pick and drop weapon.
-	public Sprite sprite;                                     // Weapon srpite to show on screen HUD.
+	public string label;                                    
+	public AudioClip shotSound, reloadSound,pickSound, dropSound;                                                                                                
+    public Sprite sprite;                                     // Weapon srpite to show on screen HUD.
 	public Vector3 rightHandPosition;                         // Position offsets relative to the player's right hand.
 	public Vector3 relativeRotation;                          // Rotation Offsets relative to the player's right hand.
 	public float bulletDamage = 10f;                          // Damage of one shot.
 	public float recoilAngle;                                 // Angle of weapon recoil.
-	public enum WeaponType                                    // Weapon types, related to player's shooting animations.
-	{
-		NONE,
-		SHORT,
-		LONG
-	}
-	public enum WeaponMode                                    // Weapon shooting modes.
-	{
-		SEMI,
-		BURST,
-		AUTO
-	}
 	public WeaponType type = WeaponType.NONE;                 // Default weapon type, change in Inspector.
 	public WeaponMode mode = WeaponMode.SEMI;                 // Default weapon mode, change in Inspector.
 	public int burstSize = 0;                                 // How many shot are fired on burst mode.
 	[SerializeField]
-	private int mag, totalBullets;                            // Current mag capacity and total amount of bullets being carried.
+	private int mag;                            // Current mag capacity and total amount of bullets being carried.
 	private int fullMag, maxBullets;                          // Default mag capacity and total bullets for reset purposes.
 	private GameObject player, gameController;                // References to the player and the game controller.
 	private ShootBehaviour playerInventory;                   // Player's inventory to store weapons.
@@ -41,12 +28,7 @@ public class InteractiveWeapon : MonoBehaviour
 
 	void Awake()
 	{
-		this.gameObject.name = this.label;
-		this.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
-		foreach (Transform t in this.transform)
-		{
-			t.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
-		}
+        this.gameObject.name = this.label;
 		player = GameObject.FindGameObjectWithTag("Player");
 		playerInventory = player.GetComponent<ShootBehaviour>();
 		col = this.transform.GetChild(0).gameObject.AddComponent<BoxCollider>();
@@ -60,7 +42,7 @@ public class InteractiveWeapon : MonoBehaviour
 			type = WeaponType.SHORT;
 		}
 		fullMag = mag;
-		maxBullets = totalBullets;
+       
 	}
 
 	// Create the sphere of interaction with player.
@@ -159,16 +141,16 @@ public class InteractiveWeapon : MonoBehaviour
 	// Start the reload action (called by shoot behaviour).
 	public bool StartReload()
 	{
-		if (mag == fullMag || totalBullets == 0)
+		if (mag == fullMag || maxBullets == 0)
 			return false;
-		else if(totalBullets < fullMag - mag)
+		else if(maxBullets < fullMag - mag)
 		{
-			mag += totalBullets;
-			totalBullets = 0; 
+			mag += maxBullets;
+			maxBullets = 0; 
 		}
 		else
 		{
-			totalBullets -= fullMag - mag;
+			maxBullets -= fullMag - mag;
 			mag = fullMag;
 		}
 
@@ -196,13 +178,29 @@ public class InteractiveWeapon : MonoBehaviour
 	// Reset the bullet parameters.
 	public void ResetBullets()
 	{
-		mag = fullMag;
-		totalBullets = maxBullets;
+        mag = fullMag;
 	}
 
 	// Update weapon screen HUD.
 	private void UpdateHud()
 	{
-		weaponHud.UpdateWeaponHUD(sprite, mag, fullMag, totalBullets);
+		weaponHud.UpdateWeaponHUD(sprite, mag, fullMag, maxBullets);
 	}
+}
+
+
+[System.Serializable]
+public enum WeaponType                                    
+{
+    NONE,
+    SHORT,
+    LONG
+}
+
+[System.Serializable]
+public enum WeaponMode      
+{
+    SEMI,
+    BURST,
+    AUTO
 }
