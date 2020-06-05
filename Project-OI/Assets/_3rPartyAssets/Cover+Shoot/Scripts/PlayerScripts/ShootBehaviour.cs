@@ -36,7 +36,7 @@ public class ShootBehaviour : GenericBehaviour
     private Transform gunMuzzle;                                   // World position of the gun muzzle.
 	private float distToHand;                                      // Distance from neck to hand.
 	private Vector3 castRelativeOrigin;                            // Position of neck to cast for blocked aim test.
-	private Dictionary<InteractiveWeapon.WeaponType, int> slotMap; // Map to designate weapon types to inventory slots.
+	private Dictionary<WeaponType, int> slotMap; // Map to designate weapon types to inventory slots.
 	private Transform hips, spine, chest, rightHand, leftArm;      // Avatar bone transforms.
 	private Vector3 initialRootRotation;                           // Initial root bone local rotation.
 	private Vector3 initialHipsRotation;                           // Initial hips rotation related to the root bone.
@@ -74,10 +74,10 @@ public class ShootBehaviour : GenericBehaviour
 		sparks.SetActive(false);
 
 		// Create weapon slots. Different weapon types can be added in the same slot - ex.: (LONG_SPECIAL, 2) for a rocket launcher.
-		slotMap = new Dictionary<InteractiveWeapon.WeaponType, int>
+		slotMap = new Dictionary<WeaponType, int>
 		{
-			{ InteractiveWeapon.WeaponType.SHORT, 1 },
-			{ InteractiveWeapon.WeaponType.LONG, 2 }
+			{ WeaponType.SHORT, 1 },
+			{ WeaponType.LONG, 2 }
 		};
 
 		// Get player's avatar bone transforms for IK.
@@ -322,17 +322,17 @@ public class ShootBehaviour : GenericBehaviour
 					if (shotDecay <= (0.4f - 2 * Time.deltaTime))
 					{
 						// Auto mode, keep firing while shoot button is pressed.
-						if (weapons[activeWeapon].mode == InteractiveWeapon.WeaponMode.AUTO && Input.GetAxisRaw(shootButton) != 0)
+						if (weapons[activeWeapon].mode == WeaponMode.AUTO && Input.GetAxisRaw(shootButton) != 0)
 						{
 							ShootWeapon(activeWeapon);
 						}
 						// Burst mode, keep shooting until reach weapon burst capacity.
-						else if (weapons[activeWeapon].mode == InteractiveWeapon.WeaponMode.BURST && burstShotCount < weapons[activeWeapon].burstSize)
+						else if (weapons[activeWeapon].mode == WeaponMode.BURST && burstShotCount < weapons[activeWeapon].burstSize)
 						{
 							ShootWeapon(activeWeapon);
 						}
 						// Reset burst count for other modes.
-						else if (weapons[activeWeapon].mode != InteractiveWeapon.WeaponMode.BURST)
+						else if (weapons[activeWeapon].mode != WeaponMode.BURST)
 						{
 							burstShotCount = 0;
 						}
@@ -427,7 +427,7 @@ public class ShootBehaviour : GenericBehaviour
 			// Keep upper body orientation regardless strafe direction.
 			float xCamRot = Quaternion.LookRotation(behaviourManager.playerCamera.forward).eulerAngles.x;
 			targetRot = Quaternion.AngleAxis(xCamRot + armsRotation, this.transform.right);
-			if (weapons[activeWeapon] && weapons[activeWeapon].type == InteractiveWeapon.WeaponType.LONG)
+			if (weapons[activeWeapon] && weapons[activeWeapon].type == WeaponType.LONG)
 			{
 				// Correction for long weapons.
 				targetRot *= Quaternion.AngleAxis(9f, this.transform.right);
@@ -452,7 +452,7 @@ public class ShootBehaviour : GenericBehaviour
 		}
 
 		// Correct left arm position when aiming with a short gun.
-		else if (isAiming && weapons[activeWeapon] && weapons[activeWeapon].type == InteractiveWeapon.WeaponType.SHORT)
+		else if (isAiming && weapons[activeWeapon] && weapons[activeWeapon].type == WeaponType.SHORT)
 		{
 			//leftArm.Rotate(new Vector3(leftleft, leftDown, leftBack));
 			leftArm.localEulerAngles = leftArm.localEulerAngles + LeftArmShortAim;
