@@ -36,7 +36,7 @@ public class ShootBehaviour : GenericBehaviour
     private Transform gunMuzzle;                                   // World position of the gun muzzle.
 	private float distToHand;                                      // Distance from neck to hand.
 	private Vector3 castRelativeOrigin;                            // Position of neck to cast for blocked aim test.
-	private Dictionary<InteractiveWeapon.WeaponType, int> slotMap; // Map to designate weapon types to inventory slots.
+	private Dictionary<WeaponType, int> slotMap; // Map to designate weapon types to inventory slots.
 	private Transform hips, spine, chest, rightHand, leftArm;      // Avatar bone transforms.
 	private Vector3 initialRootRotation;                           // Initial root bone local rotation.
 	private Vector3 initialHipsRotation;                           // Initial hips rotation related to the root bone.
@@ -74,10 +74,10 @@ public class ShootBehaviour : GenericBehaviour
 		sparks.SetActive(false);
 
 		// Create weapon slots. Different weapon types can be added in the same slot - ex.: (LONG_SPECIAL, 2) for a rocket launcher.
-		slotMap = new Dictionary<InteractiveWeapon.WeaponType, int>
+		slotMap = new Dictionary<WeaponType, int>
 		{
-			{ InteractiveWeapon.WeaponType.SHORT, 1 },
-			{ InteractiveWeapon.WeaponType.LONG, 2 }
+			{WeaponType.SHORT, 1 },
+			{WeaponType.LONG, 2 }
 		};
 
 		// Get player's avatar bone transforms for IK.
@@ -122,7 +122,7 @@ public class ShootBehaviour : GenericBehaviour
 		{
 			if (weapons[activeWeapon].StartReload())
 			{
-				AudioSource.PlayClipAtPoint(weapons[activeWeapon].reloadSound, gunMuzzle.position, 0.5f);
+				AudioSource.PlayClipAtPoint(weapons[activeWeapon].ReloadSound, gunMuzzle.position, 0.5f);
 				behaviourManager.GetAnim.SetBool(reloadBool, true);
 			}
 		}
@@ -172,7 +172,7 @@ public class ShootBehaviour : GenericBehaviour
 			burstShotCount++;
 			behaviourManager.GetAnim.SetTrigger(shootingTrigger);
 			aimBehaviour.crosshair = shootCrosshair;
-			behaviourManager.GetCamScript.BounceVertical(weapons[weapon].recoilAngle);
+			behaviourManager.GetCamScript.BounceVertical(weapons[weapon].RecoilAngle);
 
 			// Cast the shot to find a target.
 			Vector3 imprecision = Random.Range(-shotErrorRate, shotErrorRate) * behaviourManager.playerCamera.right;
@@ -189,7 +189,7 @@ public class ShootBehaviour : GenericBehaviour
 					// Call the damage behaviour of target if exists.
 					if (hit.collider.gameObject.GetComponent<HealthManager>())
 					{
-						hit.collider.gameObject.GetComponent<HealthManager>().TakeDamage(hit.point, ray.direction, weapons[weapon].bulletDamage);
+						hit.collider.gameObject.GetComponent<HealthManager>().TakeDamage(hit.point, ray.direction, weapons[weapon].BulletDamage);
 					}
 				}
 			}
@@ -201,7 +201,7 @@ public class ShootBehaviour : GenericBehaviour
 				DrawShoot(weapons[weapon].gameObject, destination, Vector3.up, null, false, false);
 			}
 			// Play shot sound.
-			AudioSource.PlayClipAtPoint(weapons[weapon].shotSound, gunMuzzle.position, 5f);
+			AudioSource.PlayClipAtPoint(weapons[weapon].ShotSound, gunMuzzle.position, 5f);
 			// Reset shot lifetime.
 			shotDecay = originalShotDecay;
 			isShotAlive = true;
@@ -272,7 +272,7 @@ public class ShootBehaviour : GenericBehaviour
 		{
 			weapons[oldWeapon].gameObject.SetActive(false);
 			gunMuzzle = null;
-			weapons[oldWeapon].Toggle(false);
+		
 		}
 		// Cycle trought empty slots to find next existing weapon or the no weapon slot.
 		while (weapons[newWeapon] == null && newWeapon > 0)
@@ -284,7 +284,7 @@ public class ShootBehaviour : GenericBehaviour
 		{
 			weapons[newWeapon].gameObject.SetActive(true);
 			gunMuzzle = weapons[newWeapon].transform.Find("muzzle");
-			weapons[newWeapon].Toggle(true);
+			
 		}
 
 		activeWeapon = newWeapon;
@@ -293,7 +293,7 @@ public class ShootBehaviour : GenericBehaviour
 		if (oldWeapon != newWeapon)
 		{
 			behaviourManager.GetAnim.SetTrigger(changeWeaponTrigger);
-			behaviourManager.GetAnim.SetInteger(weaponTypeInt, weapons[newWeapon] ? (int)weapons[newWeapon].type : 0);
+			behaviourManager.GetAnim.SetInteger(weaponTypeInt, weapons[newWeapon] ? (int)weapons[newWeapon].Type : 0);
 		}
 
 		// Set crosshair if armed.
@@ -316,23 +316,23 @@ public class ShootBehaviour : GenericBehaviour
 				if (activeWeapon > 0)
 				{
 					// Set camera bounce return on recoil end.
-					behaviourManager.GetCamScript.BounceVertical(-weapons[activeWeapon].recoilAngle * 0.1f);
+					behaviourManager.GetCamScript.BounceVertical(-weapons[activeWeapon].RecoilAngle * 0.1f);
 
 					// Handle next shot for burst or auto mode.
 					if (shotDecay <= (0.4f - 2 * Time.deltaTime))
 					{
 						// Auto mode, keep firing while shoot button is pressed.
-						if (weapons[activeWeapon].mode == InteractiveWeapon.WeaponMode.AUTO && Input.GetAxisRaw(shootButton) != 0)
+						if (weapons[activeWeapon].Mode == WeaponMode.AUTO && Input.GetAxisRaw(shootButton) != 0)
 						{
 							ShootWeapon(activeWeapon);
 						}
 						// Burst mode, keep shooting until reach weapon burst capacity.
-						else if (weapons[activeWeapon].mode == InteractiveWeapon.WeaponMode.BURST && burstShotCount < weapons[activeWeapon].burstSize)
+						else if (weapons[activeWeapon].Mode == WeaponMode.BURST && burstShotCount < weapons[activeWeapon].BurstSize)
 						{
 							ShootWeapon(activeWeapon);
 						}
 						// Reset burst count for other modes.
-						else if (weapons[activeWeapon].mode != InteractiveWeapon.WeaponMode.BURST)
+						else if (weapons[activeWeapon].Mode != WeaponMode.BURST)
 						{
 							burstShotCount = 0;
 						}
@@ -354,30 +354,30 @@ public class ShootBehaviour : GenericBehaviour
 	{
 		// Position new weapon in player's hand.
 		newWeapon.gameObject.transform.SetParent(rightHand);
-		newWeapon.transform.localPosition = newWeapon.rightHandPosition;
-		newWeapon.transform.localRotation = Quaternion.Euler(newWeapon.relativeRotation);
+		newWeapon.transform.localPosition = newWeapon.RightHandPosition;
+		newWeapon.transform.localRotation = Quaternion.Euler(newWeapon.RelativeRotation);
 
 		// Handle inventory slot conflict.
-		if (this.weapons[slotMap[newWeapon.type]])
+		if (this.weapons[slotMap[newWeapon.Type]])
 		{
 			// Same weapon type, recharge bullets and destroy duplicated object.
-			if (this.weapons[slotMap[newWeapon.type]].label == newWeapon.label)
+			if (this.weapons[slotMap[newWeapon.Type]].WeaponID == newWeapon.WeaponID)
 			{
-				this.weapons[slotMap[newWeapon.type]].ResetBullets();
-				ChangeWeapon(activeWeapon, slotMap[newWeapon.type]);
+				this.weapons[slotMap[newWeapon.Type]].ResetBullets();
+				ChangeWeapon(activeWeapon, slotMap[newWeapon.Type]);
 				GameObject.Destroy(newWeapon.gameObject);
 				return;
 			}
 			// Different weapon type, grab the new one and drop the weapon in inventory.
 			else
 			{
-				this.weapons[slotMap[newWeapon.type]].Drop();
+				this.weapons[slotMap[newWeapon.Type]].Drop();
 			}
 		}
 
 		// Call change weapon action.
-		this.weapons[slotMap[newWeapon.type]] = newWeapon;
-		ChangeWeapon(activeWeapon, slotMap[newWeapon.type]);
+		this.weapons[slotMap[newWeapon.Type]] = newWeapon;
+		ChangeWeapon(activeWeapon, slotMap[newWeapon.Type]);
 	}
 
 	// Handle reload weapon end (called by animation).
@@ -427,7 +427,7 @@ public class ShootBehaviour : GenericBehaviour
 			// Keep upper body orientation regardless strafe direction.
 			float xCamRot = Quaternion.LookRotation(behaviourManager.playerCamera.forward).eulerAngles.x;
 			targetRot = Quaternion.AngleAxis(xCamRot + armsRotation, this.transform.right);
-			if (weapons[activeWeapon] && weapons[activeWeapon].type == InteractiveWeapon.WeaponType.LONG)
+			if (weapons[activeWeapon] && weapons[activeWeapon].Type == WeaponType.LONG)
 			{
 				// Correction for long weapons.
 				targetRot *= Quaternion.AngleAxis(9f, this.transform.right);
@@ -452,7 +452,7 @@ public class ShootBehaviour : GenericBehaviour
 		}
 
 		// Correct left arm position when aiming with a short gun.
-		else if (isAiming && weapons[activeWeapon] && weapons[activeWeapon].type == InteractiveWeapon.WeaponType.SHORT)
+		else if (isAiming && weapons[activeWeapon] && weapons[activeWeapon].Type == WeaponType.SHORT)
 		{
 			//leftArm.Rotate(new Vector3(leftleft, leftDown, leftBack));
 			leftArm.localEulerAngles = leftArm.localEulerAngles + LeftArmShortAim;
