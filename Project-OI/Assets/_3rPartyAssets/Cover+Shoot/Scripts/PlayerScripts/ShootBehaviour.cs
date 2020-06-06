@@ -355,8 +355,8 @@ public class ShootBehaviour : GenericBehaviour
 	{
 		// Position new weapon in player's hand.
 		newWeapon.gameObject.transform.SetParent(rightHand);
-		newWeapon.transform.localPosition = newWeapon.RightHandPosition;
-		newWeapon.transform.localRotation = Quaternion.Euler(newWeapon.RelativeRotation);
+		newWeapon.transform.localPosition = newWeapon.RightHandPositionHold;
+		newWeapon.transform.localRotation = Quaternion.Euler(newWeapon.RelativeRotationHold);
 
 		// Handle inventory slot conflict.
 		if (this.weapons[slotMap[newWeapon.Type]])
@@ -459,6 +459,24 @@ public class ShootBehaviour : GenericBehaviour
 			leftArm.localEulerAngles = leftArm.localEulerAngles + LeftArmShortAim;
 		}
 	}
+
+    public void ToggleWeaponPosition(bool aiming)
+    {
+        if (weapons[activeWeapon] == null)
+            return;
+
+        if (aiming)
+        {
+            weapons[activeWeapon].transform.localPosition = weapons[activeWeapon].RightHandPositionAim;
+            weapons[activeWeapon].transform.localRotation = Quaternion.Euler(weapons[activeWeapon].RelativeRotationAim);
+        }
+        else
+        {
+            weapons[activeWeapon].transform.localPosition = weapons[activeWeapon].RightHandPositionHold;
+            weapons[activeWeapon].transform.localRotation = Quaternion.Euler(weapons[activeWeapon].RelativeRotationHold);
+        }
+    }
+
 
     public PlayerInventory GetInventory()
     {

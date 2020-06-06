@@ -8,8 +8,10 @@ public class InteractiveWeapon : MonoBehaviour
     public bool Pickable { private set; get; }
     public AudioClip ShotSound, ReloadSound,PickSound,DropSound;
     public Transform Muzzle;
-    public Vector3 RightHandPosition;                         // Position offsets relative to the player's right hand.
-	public Vector3 RelativeRotation;                          // Rotation Offsets relative to the player's right hand.
+    public Vector3 RightHandPositionAim;
+    public Vector3 RightHandPositionHold;  // Position offsets relative to the player's right hand.
+    public Vector3 RelativeRotationAim;
+    public Vector3 RelativeRotationHold; 
     public float BulletDamage = 10f;                          // Damage of one shot.    
 	public float RecoilAngle;                                 // Angle of weapon recoil.
     public WeaponType weaponType = WeaponType.Pistol;
