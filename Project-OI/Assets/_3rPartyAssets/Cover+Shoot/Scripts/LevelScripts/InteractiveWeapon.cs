@@ -100,6 +100,7 @@ public class InteractiveWeapon : MonoBehaviour
 [System.Serializable]
 public enum AimType                                    
 {
+    NONE,
     SHORT,
     LONG
 }
