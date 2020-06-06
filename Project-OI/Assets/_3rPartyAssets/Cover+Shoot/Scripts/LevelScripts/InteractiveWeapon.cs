@@ -12,7 +12,8 @@ public class InteractiveWeapon : MonoBehaviour
 	public Vector3 RelativeRotation;                          // Rotation Offsets relative to the player's right hand.
     public float BulletDamage = 10f;                          // Damage of one shot.    
 	public float RecoilAngle;                                 // Angle of weapon recoil.
-	public WeaponType Type = WeaponType.NONE;                 // Default weapon type, change in Inspector.
+    public WeaponType weaponType = WeaponType.Pistol;
+	public AimType Type = AimType.SHORT;                 // Default weapon type, change in Inspector.
 	public WeaponMode Mode = WeaponMode.SEMI;                 // Default weapon mode, change in Inspector.
     public int BurstSize = 0;                                 // How many shot are fired on burst mode.
 
@@ -39,6 +40,7 @@ public class InteractiveWeapon : MonoBehaviour
         playerShootBehavior.AddWeapon(this);
         interactiveRadius.enabled=false;
         this.Pickable = false;
+        currentInventoryAmmoCount = playerShootBehavior.GetInventory().GetCurrentAmmo(weaponType);
     }
 
 
@@ -82,7 +84,8 @@ public class InteractiveWeapon : MonoBehaviour
 		if (mag > 0)
 		{
             mag--;
-			return true;
+            playerShootBehavior.GetInventory().RemoveAmmoFromInventory(weaponType);
+            return true;
 		}
 		return false;
 	}
@@ -95,9 +98,8 @@ public class InteractiveWeapon : MonoBehaviour
 
 
 [System.Serializable]
-public enum WeaponType                                    
+public enum AimType                                    
 {
-    NONE,
     SHORT,
     LONG
 }
@@ -109,3 +111,11 @@ public enum WeaponMode
     BURST,
     AUTO
 }
+
+[System.Serializable]
+public enum WeaponType
+{
+    Pistol,
+    Rifle
+}
+

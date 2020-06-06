@@ -6,6 +6,7 @@ using UnityEngine;
 // There is no need to use behaviour manager to watch it. Use direct call to all the MonoBehaviour basic functions.
 public class ShootBehaviour : GenericBehaviour
 {
+    [SerializeField] PlayerInventory playerInventory;
 	public string shootButton = "Fire1",                           // Default shoot weapon button.
 		pickButton = "Interact",                                   // Default pick weapon button.
 		changeButton = "Change",                                   // Default change weapon button.
@@ -36,7 +37,7 @@ public class ShootBehaviour : GenericBehaviour
     private Transform gunMuzzle;                                   // World position of the gun muzzle.
 	private float distToHand;                                      // Distance from neck to hand.
 	private Vector3 castRelativeOrigin;                            // Position of neck to cast for blocked aim test.
-	private Dictionary<WeaponType, int> slotMap; // Map to designate weapon types to inventory slots.
+	private Dictionary<AimType, int> slotMap;                   // Map to designate weapon types to inventory slots.
 	private Transform hips, spine, chest, rightHand, leftArm;      // Avatar bone transforms.
 	private Vector3 initialRootRotation;                           // Initial root bone local rotation.
 	private Vector3 initialHipsRotation;                           // Initial hips rotation related to the root bone.
@@ -74,10 +75,10 @@ public class ShootBehaviour : GenericBehaviour
 		sparks.SetActive(false);
 
 		// Create weapon slots. Different weapon types can be added in the same slot - ex.: (LONG_SPECIAL, 2) for a rocket launcher.
-		slotMap = new Dictionary<WeaponType, int>
+		slotMap = new Dictionary<AimType, int>
 		{
-			{WeaponType.SHORT, 1 },
-			{WeaponType.LONG, 2 }
+			{AimType.SHORT, 1 },
+			{AimType.LONG, 2 }
 		};
 
 		// Get player's avatar bone transforms for IK.
@@ -427,7 +428,7 @@ public class ShootBehaviour : GenericBehaviour
 			// Keep upper body orientation regardless strafe direction.
 			float xCamRot = Quaternion.LookRotation(behaviourManager.playerCamera.forward).eulerAngles.x;
 			targetRot = Quaternion.AngleAxis(xCamRot + armsRotation, this.transform.right);
-			if (weapons[activeWeapon] && weapons[activeWeapon].Type == WeaponType.LONG)
+			if (weapons[activeWeapon] && weapons[activeWeapon].Type == AimType.LONG)
 			{
 				// Correction for long weapons.
 				targetRot *= Quaternion.AngleAxis(9f, this.transform.right);
@@ -452,10 +453,15 @@ public class ShootBehaviour : GenericBehaviour
 		}
 
 		// Correct left arm position when aiming with a short gun.
-		else if (isAiming && weapons[activeWeapon] && weapons[activeWeapon].Type == WeaponType.SHORT)
+		else if (isAiming && weapons[activeWeapon] && weapons[activeWeapon].Type == AimType.SHORT)
 		{
 			//leftArm.Rotate(new Vector3(leftleft, leftDown, leftBack));
 			leftArm.localEulerAngles = leftArm.localEulerAngles + LeftArmShortAim;
 		}
 	}
+
+    public PlayerInventory GetInventory()
+    {
+        return playerInventory; 
+    }
 }
