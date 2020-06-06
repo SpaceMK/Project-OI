@@ -10,6 +10,8 @@ public class AimBehaviour : GenericBehaviour
 	public Vector3 aimPivotOffset = new Vector3(0.5f, 1.2f,  0f);         // Offset to repoint the camera when aiming.
 	public Vector3 aimCamOffset   = new Vector3(0f, 0.4f, -0.7f);         // Offset to relocate the camera when aiming.
 
+    [SerializeField] ShootBehaviour playerShootBehavior;
+
 	private int aimBool;                                                  // Animator variable related to aiming.
 	private bool aim;                                                     // Boolean to determine whether or not the player is aiming.
 	private int cornerBool;                                               // Animator variable related to cover corner..
@@ -83,6 +85,7 @@ public class AimBehaviour : GenericBehaviour
 			behaviourManager.GetAnim.SetFloat(speedFloat, 0);
 			// This state overrides the active one.
 			behaviourManager.OverrideWithBehaviour(this);
+            playerShootBehavior.ToggleWeaponPosition(true);
 		}
 	}
 
@@ -95,7 +98,8 @@ public class AimBehaviour : GenericBehaviour
 		behaviourManager.GetCamScript.ResetMaxVerticalAngle();
 		yield return new WaitForSeconds(0.05f);
 		behaviourManager.RevokeOverridingBehaviour(this);
-	}
+        playerShootBehavior.ToggleWeaponPosition(false);
+    }
 
 	// LocalFixedUpdate overrides the virtual function of the base class.
 	public override void LocalFixedUpdate()
