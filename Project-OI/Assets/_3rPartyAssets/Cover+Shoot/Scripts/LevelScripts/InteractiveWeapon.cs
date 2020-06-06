@@ -22,8 +22,8 @@ public class InteractiveWeapon : MonoBehaviour
 	[SerializeField] Rigidbody rbody;                                  // Weapon rigidbody.
 
   
-    private int fullMag, maxBullets;                          // Default mag capacity and total bullets for reset purposes.
-    private ShootBehaviour playerInventory;                   // Player's inventory to store weapons.
+    private int fullMag, currentInventoryAmmoCount;                          // Default mag capacity and total bullets for reset purposes.
+    private ShootBehaviour playerShootBehavior;                   // Player's inventory to store weapons.
 
     void Awake()
 	{
@@ -31,18 +31,17 @@ public class InteractiveWeapon : MonoBehaviour
         Pickable = true;
 	}
 
-    public void PickUPWeapon(ShootBehaviour shootBehaviour)
+    public void PickUpWeapon(ShootBehaviour shootBehaviour)
     {
-        playerInventory = shootBehaviour;
+        playerShootBehavior = shootBehaviour;
         rbody.isKinematic = true;
         this.col.enabled = false;
-        playerInventory.AddWeapon(this);
+        playerShootBehavior.AddWeapon(this);
         interactiveRadius.enabled=false;
         this.Pickable = false;
     }
 
 
-	// Manage the drop action.
 	public void Drop()
 	{
 		this.gameObject.SetActive(true);
@@ -50,35 +49,34 @@ public class InteractiveWeapon : MonoBehaviour
 		rbody.isKinematic = false;
 		this.transform.parent = null;
 		this.col.enabled = true;
-        playerInventory = null;
+        interactiveRadius.enabled = true;
+        this.Pickable = true;
+        playerShootBehavior = null;
 	}
 
-	// Start the reload action (called by shoot behaviour).
 	public bool StartReload()
 	{
-		if (mag == fullMag || maxBullets == 0)
+		if (mag == fullMag || currentInventoryAmmoCount == 0)
 			return false;
-		else if(maxBullets < fullMag - mag)
+		else if(currentInventoryAmmoCount < fullMag - mag)
 		{
-			mag += maxBullets;
-			maxBullets = 0; 
+			mag += currentInventoryAmmoCount;
+			currentInventoryAmmoCount = 0; 
 		}
 		else
 		{
-			maxBullets -= fullMag - mag;
+			currentInventoryAmmoCount -= fullMag - mag;
 			mag = fullMag;
 		}
 
 		return true;
 	}
-
-	// End the reload action (called by shoot behaviour).
 	public void EndReload()
 	{
-	
+
 	}
 
-	// Manage shoot action.
+	
 	public bool Shoot()
 	{
 		if (mag > 0)
@@ -89,13 +87,10 @@ public class InteractiveWeapon : MonoBehaviour
 		return false;
 	}
 
-	// Reset the bullet parameters.
 	public void ResetBullets()
 	{
         mag = fullMag;
 	}
-
-	// Update weapon screen HUD;
 }
 
 

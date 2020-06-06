@@ -283,7 +283,7 @@ public class ShootBehaviour : GenericBehaviour
 		if (newWeapon > 0)
 		{
 			weapons[newWeapon].gameObject.SetActive(true);
-			gunMuzzle = weapons[newWeapon].transform.Find("muzzle");
+			gunMuzzle = weapons[newWeapon].Muzzle;
 			
 		}
 
