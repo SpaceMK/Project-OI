@@ -187,11 +187,16 @@ public class ShootBehaviour : GenericBehaviour
 					// Handle shot effects on target.
 					DrawShoot(weapons[weapon].gameObject, hit.point, hit.normal, hit.collider.transform);
 
-					// Call the damage behaviour of target if exists.
-					if (hit.collider.gameObject.GetComponent<HealthManager>())
-					{
-						hit.collider.gameObject.GetComponent<HealthManager>().TakeDamage(hit.point, ray.direction, weapons[weapon].BulletDamage);
-					}
+                    // Call the damage behaviour of target if exists.
+                    var takeDamage = hit.collider.gameObject.GetComponent(typeof(ITakeDamage)) as ITakeDamage;
+                    if (takeDamage != null)
+                    {
+                        takeDamage.TakeDamage(weapons[activeWeapon].BulletDamage);
+                    }
+                    else
+                    {
+                        Debug.Log("Miss");
+                    }
 				}
 			}
 			// No target was hit.
