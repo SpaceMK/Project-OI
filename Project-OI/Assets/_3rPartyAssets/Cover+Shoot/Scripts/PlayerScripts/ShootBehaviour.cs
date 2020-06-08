@@ -193,10 +193,6 @@ public class ShootBehaviour : GenericBehaviour
                     {
                         takeDamage.TakeDamage(weapons[activeWeapon].BulletDamage);
                     }
-                    else
-                    {
-                        Debug.Log("Miss");
-                    }
 				}
 			}
 			// No target was hit.
