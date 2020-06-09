@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 
 // This class corresponds to any in-game weapon interactions.
-public class InteractiveWeapon : MonoBehaviour
+public class InteractiveWeapon : MonoBehaviour, IInteractable
 {
 	public string WeaponID;
     public bool Pickable { private set; get; }
