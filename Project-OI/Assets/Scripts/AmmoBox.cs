@@ -5,17 +5,26 @@ using UnityEngine;
 public class AmmoBox : MonoBehaviour,IInteractable
 {
     [SerializeField] Animator boxAnimator;
-    [SerializeField] int pistolAmmo;
+    [SerializeField] BoxCollider ammoBoxCollider;
+    [SerializeField] int ammoCount;
+    [SerializeField] WeaponType ammoType;
     [SerializeField] string animationTrigger;
+  
 
-    public int OpenBox()
+    public void OpenBox()
     {
         boxAnimator.SetTrigger(animationTrigger);
-        return GetAmmo();
+        ammoBoxCollider.enabled = false;
     }
 
-    private int GetAmmo()
+    public WeaponType GetAmmoType()
     {
-        return pistolAmmo;
+        return ammoType;
+    }
+
+    public int GetAmmo()
+    {
+        Destroy(this.gameObject,2f);
+        return ammoCount;
     }
 }

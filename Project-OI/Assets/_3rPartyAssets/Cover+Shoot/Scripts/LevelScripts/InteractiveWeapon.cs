@@ -60,7 +60,8 @@ public class InteractiveWeapon : MonoBehaviour, IInteractable
 
 	public bool StartReload()
 	{
-		if (mag == fullMag || currentInventoryAmmoCount == 0)
+        currentInventoryAmmoCount = playerShootBehavior.GetInventory().GetCurrentAmmo(weaponType);
+        if (mag == fullMag || currentInventoryAmmoCount == 0)
 			return false;
 		else if(currentInventoryAmmoCount < fullMag - mag)
 		{

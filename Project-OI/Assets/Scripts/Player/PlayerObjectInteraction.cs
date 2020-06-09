@@ -6,7 +6,8 @@ using UnityEngine;
 public class PlayerObjectInteraction : MonoBehaviour
 {
     [SerializeField] ShootBehaviour playerShootBehavior;
-   IInteractable interactiveObject;
+    [SerializeField] PlayerInventory playerInventory;
+    IInteractable interactiveObject;
 
     public Action<IInteractable> CollisionInteraction;
 
@@ -27,15 +28,16 @@ public class PlayerObjectInteraction : MonoBehaviour
                 PickUpWeapon(weapon);
             break;
             case AmmoBox box:
-                OpenBox(box);
+                OpenAmmoBox(box);
             break;
         }
     }
 
-
-    void OpenBox(AmmoBox ammoBox)
+    void OpenAmmoBox(AmmoBox ammoBox)
     {
-        Debug.Log(ammoBox.OpenBox());
+        ammoBox.OpenBox();
+        playerInventory.AddAmmo(ammoBox);
+        CollisionInteraction?.Invoke(null);
     }
 
     void PickUpWeapon(InteractiveWeapon weapon)
@@ -53,6 +55,7 @@ public class PlayerObjectInteraction : MonoBehaviour
 
     void OnTriggerExit(Collider collider)
     {
+        Debug.Log("HERE!!");
         interactiveObject = null;
         CollisionInteraction?.Invoke(null);
     }

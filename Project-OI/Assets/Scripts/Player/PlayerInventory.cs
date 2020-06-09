@@ -19,6 +19,16 @@ public class PlayerInventory : MonoBehaviour
         else
             rifleAmmo--;
     }
+
+
+    public void AddAmmo(AmmoBox ammoBox)
+    {
+        int addToAmmo = ammoBox.GetAmmo();
+        if (ammoBox.GetAmmoType() == WeaponType.Pistol)
+            pistolAmmo += addToAmmo;
+        else
+            rifleAmmo += addToAmmo;
+    }
 }
 
 
