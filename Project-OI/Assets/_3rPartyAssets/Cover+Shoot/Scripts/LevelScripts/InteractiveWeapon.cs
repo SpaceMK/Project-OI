@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 // This class corresponds to any in-game weapon interactions.
@@ -24,7 +25,7 @@ public class InteractiveWeapon : MonoBehaviour, IInteractable
 	[SerializeField] BoxCollider col;                                  // Weapon collider.
 	[SerializeField] Rigidbody rbody;                                  // Weapon rigidbody.
 
-  
+    public Action WeaponShoot;
     private int fullMag, currentInventoryAmmoCount;                          // Default mag capacity and total bullets for reset purposes.
     private ShootBehaviour playerShootBehavior;                   // Player's inventory to store weapons.
 
@@ -86,6 +87,7 @@ public class InteractiveWeapon : MonoBehaviour, IInteractable
 	{
 		if (mag > 0)
 		{
+            WeaponShoot?.Invoke();
             mag--;
             playerShootBehavior.GetInventory().RemoveAmmoFromInventory(weaponType);
             return true;
