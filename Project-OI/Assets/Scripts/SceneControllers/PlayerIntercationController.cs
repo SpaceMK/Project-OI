@@ -20,9 +20,11 @@ public class PlayerIntercationController : MonoBehaviour
             case (null):
                 uiInstruction.DisplayText(InteractionType.None,"");
             break;
-            case InteractiveWeapon i:
-                var weapon = (InteractiveWeapon)interactable;
+            case InteractiveWeapon weapon:
                 uiInstruction.DisplayText(InteractionType.Weapon, weapon.WeaponID);
+                break;
+            case AmmoBox box:
+                uiInstruction.DisplayText(InteractionType.AmmoBox, null);
                 break;
         }
         

@@ -23,12 +23,20 @@ public class PlayerObjectInteraction : MonoBehaviour
     {
         switch (interactiveObject)
         {
-            case InteractiveWeapon i:
-                PickUpWeapon(i);
+            case InteractiveWeapon weapon:
+                PickUpWeapon(weapon);
+            break;
+            case AmmoBox box:
+                OpenBox(box);
             break;
         }
     }
 
+
+    void OpenBox(AmmoBox ammoBox)
+    {
+        Debug.Log(ammoBox.OpenBox());
+    }
 
     void PickUpWeapon(InteractiveWeapon weapon)
     {

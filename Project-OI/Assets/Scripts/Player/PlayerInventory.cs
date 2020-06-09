@@ -9,7 +9,6 @@ public class PlayerInventory : MonoBehaviour
     public int GetCurrentAmmo(WeaponType weaponType)
     {
         int ammo = weaponType == WeaponType.Pistol ? pistolAmmo : rifleAmmo;
-        Debug.Log(ammo);
         return ammo;
     }
 
