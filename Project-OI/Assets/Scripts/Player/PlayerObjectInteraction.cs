@@ -55,7 +55,6 @@ public class PlayerObjectInteraction : MonoBehaviour
 
     void OnTriggerExit(Collider collider)
     {
-        Debug.Log("HERE!!");
         interactiveObject = null;
         CollisionInteraction?.Invoke(null);
     }

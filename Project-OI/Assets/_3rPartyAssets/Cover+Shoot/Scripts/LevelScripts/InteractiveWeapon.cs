@@ -25,7 +25,7 @@ public class InteractiveWeapon : MonoBehaviour, IInteractable
 	[SerializeField] BoxCollider col;                                  // Weapon collider.
 	[SerializeField] Rigidbody rbody;                                  // Weapon rigidbody.
 
-    public Action WeaponShoot;
+    public Action<int> WeaponAnimation;
     private int fullMag, currentInventoryAmmoCount;                          // Default mag capacity and total bullets for reset purposes.
     private ShootBehaviour playerShootBehavior;                   // Player's inventory to store weapons.
 
@@ -64,7 +64,7 @@ public class InteractiveWeapon : MonoBehaviour, IInteractable
         currentInventoryAmmoCount = playerShootBehavior.GetInventory().GetCurrentAmmo(weaponType);
         if (mag == fullMag || currentInventoryAmmoCount == 0)
 			return false;
-		else if(currentInventoryAmmoCount < fullMag - mag)
+		else if (currentInventoryAmmoCount < fullMag - mag)
 		{
 			mag += currentInventoryAmmoCount;
 			currentInventoryAmmoCount = 0; 
@@ -74,8 +74,8 @@ public class InteractiveWeapon : MonoBehaviour, IInteractable
 			currentInventoryAmmoCount -= fullMag - mag;
 			mag = fullMag;
 		}
-
-		return true;
+        WeaponAnimation?.Invoke(mag);
+        return true;
 	}
 	public void EndReload()
 	{
@@ -87,8 +87,8 @@ public class InteractiveWeapon : MonoBehaviour, IInteractable
 	{
 		if (mag > 0)
 		{
-            WeaponShoot?.Invoke();
             mag--;
+            WeaponAnimation?.Invoke(mag);
             playerShootBehavior.GetInventory().RemoveAmmoFromInventory(weaponType);
             return true;
 		}

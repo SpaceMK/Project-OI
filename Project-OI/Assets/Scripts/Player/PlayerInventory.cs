@@ -22,7 +22,7 @@ public class PlayerInventory : MonoBehaviour
 
 
     public void AddAmmo(AmmoBox ammoBox)
-    {
+    { 
         int addToAmmo = ammoBox.GetAmmo();
         if (ammoBox.GetAmmoType() == WeaponType.Pistol)
             pistolAmmo += addToAmmo;
