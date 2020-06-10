@@ -18,6 +18,7 @@ public class StaticTarget : MonoBehaviour,ITakeDamage
 
     public void TakeDamage(float damage)
     {
+        Debug.Log(damage);
         targetHealth -= damage;
         if (targetHealth <= 0f)
             ChangeTargetColor(true);
