@@ -1,7 +1,5 @@
 ﻿using ServiceLocatorSample.ServiceLocator;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerObjectInteraction : MonoBehaviour
