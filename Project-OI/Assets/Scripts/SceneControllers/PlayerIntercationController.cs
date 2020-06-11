@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using ServiceLocatorSample.ServiceLocator;
 using UnityEngine;
 
 public class PlayerIntercationController : MonoBehaviour

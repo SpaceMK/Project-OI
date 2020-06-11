@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ServiceLocatorSample.ServiceLocator;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -44,6 +45,7 @@ public class PlayerObjectInteraction : MonoBehaviour
     {
         if (weapon.Pickable)
             weapon.PickUpWeapon(playerShootBehavior);
+        ServiceLocator.Current.Get<AudioInput>().PlayAudio(AudioActionType.PickUpWeapon);
         CollisionInteraction?.Invoke(null);
     }
 
