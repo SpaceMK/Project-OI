@@ -109,12 +109,12 @@ public class ShootBehaviour : GenericBehaviour
 	private void Update()
 	{
 		// Handle shoot weapon action.
-		if (Input.GetMouseButtonDown(0) && !isShooting && activeWeapon > 0 && burstShotCount == 0)
+		if (Input.GetKey(shootButton) && !isShooting && activeWeapon > 0 && burstShotCount == 0)
 		{
 			isShooting = true;
 			ShootWeapon(activeWeapon);
 		}
-		else if (isShooting)
+		else if (isShooting && Input.GetKeyUp(shootButton))
 		{
 			isShooting = false;
 		}
@@ -326,7 +326,7 @@ public class ShootBehaviour : GenericBehaviour
 					if (shotDecay <= (0.4f - 2 * Time.deltaTime))
 					{
 						// Auto mode, keep firing while shoot button is pressed.
-						if (weapons[activeWeapon].Mode == WeaponMode.AUTO && Input.GetMouseButtonDown(0))
+						if (weapons[activeWeapon].Mode == WeaponMode.AUTO && Input.GetKey(shootButton))
 						{
 							ShootWeapon(activeWeapon);
 						}
