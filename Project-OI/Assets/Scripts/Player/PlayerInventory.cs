@@ -5,25 +5,25 @@ using UnityEngine;
 public class PlayerInventory : MonoBehaviour
 {
     [SerializeField] int pistolAmmo,rifleAmmo;
-    WeaponType currentUsedWeapon;
-    public int GetCurrentAmmo(WeaponType weaponType)
+    WeaponAmmo currentUsedWeapon;
+    public int GetCurrentAmmo(WeaponAmmo weaponType)
     {
-        int ammo = weaponType == WeaponType.Pistol ? pistolAmmo : rifleAmmo;
+        int ammo = weaponType == WeaponAmmo.Pistol ? pistolAmmo : rifleAmmo;
         return ammo;
     }
 
-    public void RemoveAmmoFromInventory(WeaponType weaponType)
+    public void RemoveAmmoFromInventory(WeaponAmmo weaponType)
     {
-        if (weaponType == WeaponType.Pistol)
+        if (weaponType == WeaponAmmo.Pistol)
             pistolAmmo--;
         else
             rifleAmmo--;
     }
 
-    public void AddAmmoToInventory(WeaponType weaponType,int ammo)
+    public void AddAmmoToInventory(WeaponAmmo weaponType,int ammo)
     {
         currentUsedWeapon = weaponType;
-        if (weaponType == WeaponType.Pistol)
+        if (weaponType == WeaponAmmo.Pistol)
             pistolAmmo += ammo;
         else
             rifleAmmo += ammo;
@@ -32,17 +32,20 @@ public class PlayerInventory : MonoBehaviour
     public void AddAmmoFromBox(AmmoBox ammoBox)
     { 
         int addToAmmo = ammoBox.GetAmmo();
-        if (ammoBox.GetAmmoType() == WeaponType.Pistol)
+        if (ammoBox.GetAmmoType() == WeaponAmmo.Pistol)
             pistolAmmo += addToAmmo;
         else
             rifleAmmo += addToAmmo;
     }
 
-
-    public int ReturAmmo()
+    public int GetPistolAmmo()
     {
-        int currentUsedAmmo = currentUsedWeapon == WeaponType.Pistol ? pistolAmmo : rifleAmmo;
-        return currentUsedAmmo;
+        return pistolAmmo;
+    }
+
+    public int GetRifleAmmo()
+    {
+        return rifleAmmo;
     }
 
 }

@@ -1,18 +1,24 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using TMPro;
 using UnityEngine;
+using DG.Tweening;
 
 public class UIInventory : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] TextMeshProUGUI inventoryLabelText;
+    [SerializeField][Range(0.1f,0.5f)] float fadeIn;
+    [SerializeField][Range(1f, 2f)] float fadeOut;
+
     void Start()
     {
-        
+        inventoryLabelText.DOFade(0f, 0f);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void DisplayInventoryStatus(string status)
     {
-        
+        inventoryLabelText.text = status;
+        Sequence textSequence = DOTween.Sequence();
+        textSequence.Append(inventoryLabelText.DOFade(1,fadeIn));
+        textSequence.Append(inventoryLabelText.DOFade(1, 5f));
+        textSequence.Append(inventoryLabelText.DOFade(0, fadeOut));
     }
 }

@@ -15,7 +15,7 @@ public class InteractiveWeapon : MonoBehaviour, IInteractable
     public Vector3 RelativeRotationHold; 
     public float BulletDamage = 10f;                          // Damage of one shot.    
 	public float RecoilAngle;                                 // Angle of weapon recoil.
-    public WeaponType weaponType = WeaponType.Pistol;
+    public WeaponAmmo weaponType = WeaponAmmo.Pistol;
 	public AimType Type = AimType.SHORT;                 // Default weapon type, change in Inspector.
 	public WeaponMode Mode = WeaponMode.SEMI;                 // Default weapon mode, change in Inspector.
     public int BurstSize = 0;                                 // How many shot are fired on burst mode.
@@ -120,7 +120,7 @@ public enum WeaponMode
 }
 
 [System.Serializable]
-public enum WeaponType
+public enum WeaponAmmo
 {
     Pistol,
     Rifle

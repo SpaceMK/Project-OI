@@ -4,20 +4,20 @@ using UnityEngine;
 public class UIInteractionInstruction : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI instructionText;
-    [SerializeField] string weaponMessage,ammoBoxMessage;
+    [SerializeField] string boxMessage;
 
     public void DisplayText(InteractionType type,string tag)
     {
         switch (type)
         {
             case (InteractionType.Weapon):
-                instructionText.text = weaponMessage + " " + tag; 
+                instructionText.text = boxMessage + " " + tag; 
                 break;
             case (InteractionType.None):
                 instructionText.text = "";
                 break;
             case (InteractionType.AmmoBox):
-                instructionText.text = ammoBoxMessage;
+                instructionText.text = boxMessage + " " + tag + " ammo";
             break;
         }
     }

@@ -7,7 +7,7 @@ public class AmmoBox : MonoBehaviour,IInteractable
     [SerializeField] Animator boxAnimator;
     [SerializeField] BoxCollider ammoBoxCollider;
     [SerializeField] int ammoCount;
-    [SerializeField] WeaponType ammoType;
+    [SerializeField] WeaponAmmo ammoType;
     [SerializeField] string animationTrigger;
   
 
@@ -17,7 +17,7 @@ public class AmmoBox : MonoBehaviour,IInteractable
         ammoBoxCollider.enabled = false;
     }
 
-    public WeaponType GetAmmoType()
+    public WeaponAmmo GetAmmoType()
     {
         return ammoType;
     }

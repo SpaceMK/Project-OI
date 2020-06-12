@@ -23,7 +23,8 @@ public class PlayerIntercationController : MonoBehaviour
                 uiInstruction.DisplayText(InteractionType.Weapon, weapon.WeaponID);
                 break;
             case AmmoBox box:
-                uiInstruction.DisplayText(InteractionType.AmmoBox, null);
+                string tag = box.GetAmmoType().ToString().ToLower();
+                uiInstruction.DisplayText(InteractionType.AmmoBox,tag);
                 break;
         }
         
