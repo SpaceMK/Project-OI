@@ -8,7 +8,7 @@ public class BasicBehaviour : MonoBehaviour
 	public Transform playerCamera;                        // Reference to the camera that focus the player.
 	public float turnSmoothing = 0.06f;                   // Speed of turn when moving to match camera facing.
 	public float sprintFOV = 100f;                        // the FOV to use on the camera when player is sprinting.
-	public string sprintButton = "Sprint";                // Default sprint button input name.
+    public KeyCode sprintButton;                // Default sprint button input name.
 
 	private float h;                                      // Horizontal Axis.
 	private float v;                                      // Vertical Axis.
@@ -70,9 +70,8 @@ public class BasicBehaviour : MonoBehaviour
 		anim.SetFloat(hFloat, h, 0.1f, Time.deltaTime);
 		anim.SetFloat(vFloat, v, 0.1f, Time.deltaTime);
 
-		// Toggle sprint by input.
-		sprint = Input.GetButton (sprintButton);
-
+        // Toggle sprint by input.
+        sprint = Input.GetKey(sprintButton);
 		// Set the correct camera FOV for sprint mode.
 		if(IsSprinting())
 		{

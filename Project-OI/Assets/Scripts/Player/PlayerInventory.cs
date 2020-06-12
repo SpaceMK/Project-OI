@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerInventory : MonoBehaviour
 {
     [SerializeField] int pistolAmmo,rifleAmmo;
-
+    WeaponType currentUsedWeapon;
     public int GetCurrentAmmo(WeaponType weaponType)
     {
         int ammo = weaponType == WeaponType.Pistol ? pistolAmmo : rifleAmmo;
@@ -20,8 +20,16 @@ public class PlayerInventory : MonoBehaviour
             rifleAmmo--;
     }
 
+    public void AddAmmoToInventory(WeaponType weaponType,int ammo)
+    {
+        currentUsedWeapon = weaponType;
+        if (weaponType == WeaponType.Pistol)
+            pistolAmmo += ammo;
+        else
+            rifleAmmo += ammo;
+    }
 
-    public void AddAmmo(AmmoBox ammoBox)
+    public void AddAmmoFromBox(AmmoBox ammoBox)
     { 
         int addToAmmo = ammoBox.GetAmmo();
         if (ammoBox.GetAmmoType() == WeaponType.Pistol)
@@ -29,6 +37,14 @@ public class PlayerInventory : MonoBehaviour
         else
             rifleAmmo += addToAmmo;
     }
+
+
+    public int ReturAmmo()
+    {
+        int currentUsedAmmo = currentUsedWeapon == WeaponType.Pistol ? pistolAmmo : rifleAmmo;
+        return currentUsedAmmo;
+    }
+
 }
 
 

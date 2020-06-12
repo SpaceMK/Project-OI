@@ -13,7 +13,7 @@ public class PlayerObjectInteraction : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown(playerShootBehavior.pickButton)&& interactiveObject!=null)
+        if (Input.GetKeyDown(playerShootBehavior.pickButton)&& interactiveObject!=null)
         {
             InteractWithObject();
         }
@@ -35,7 +35,7 @@ public class PlayerObjectInteraction : MonoBehaviour
     void OpenAmmoBox(AmmoBox ammoBox)
     {
         ammoBox.OpenBox();
-        playerInventory.AddAmmo(ammoBox);
+        playerInventory.AddAmmoFromBox(ammoBox);
         CollisionInteraction?.Invoke(null);
     }
 

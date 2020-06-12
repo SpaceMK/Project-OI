@@ -43,7 +43,8 @@ public class InteractiveWeapon : MonoBehaviour, IInteractable
         playerShootBehavior.AddWeapon(this);
         interactiveRadius.enabled=false;
         this.Pickable = false;
-        currentInventoryAmmoCount = playerShootBehavior.GetInventory().GetCurrentAmmo(weaponType);
+        currentInventoryAmmoCount = playerShootBehavior.GetInventory().GetCurrentAmmo(weaponType)+mag;
+        playerShootBehavior.GetInventory().AddAmmoToInventory(weaponType,mag);
     }
 
 
@@ -62,7 +63,7 @@ public class InteractiveWeapon : MonoBehaviour, IInteractable
 	public bool StartReload()
 	{
         currentInventoryAmmoCount = playerShootBehavior.GetInventory().GetCurrentAmmo(weaponType);
-        if (mag == fullMag || currentInventoryAmmoCount == 0)
+        if (mag == fullMag || currentInventoryAmmoCount == 0 || currentInventoryAmmoCount< fullMag)
 			return false;
 		else if (currentInventoryAmmoCount < fullMag - mag)
 		{

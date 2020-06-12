@@ -7,11 +7,11 @@ using UnityEngine;
 public class ShootBehaviour : GenericBehaviour
 {
     [SerializeField] PlayerInventory playerInventory;
-	public string shootButton = "Fire1",                           // Default shoot weapon button.
-		pickButton = "Interact",                                   // Default pick weapon button.
-		changeButton = "Change",                                   // Default change weapon button.
-		reloadButton = "Reload",                                   // Default reload weapon button.
-		dropButton = "Drop";                                       // Default drop weapon button.
+	public KeyCode shootButton,                           // Default shoot weapon button.
+		pickButton,                                   // Default pick weapon button.
+		changeWeaponButton,                                   // Default change weapon button.
+		reloadButton,                                   // Default reload weapon button.
+		dropButton;                                       // Default drop weapon button.
 	public Texture2D aimCrosshair, shootCrosshair;                 // Crosshair textures for aiming and shooting.
 	public GameObject muzzleFlash, shot, sparks;                   // Game objects for shot effects.
 	public Material bulletHole;                                    // Material for the bullet hole placed on target shot.
@@ -109,17 +109,17 @@ public class ShootBehaviour : GenericBehaviour
 	private void Update()
 	{
 		// Handle shoot weapon action.
-		if (Input.GetAxisRaw(shootButton) != 0 && !isShooting && activeWeapon > 0 && burstShotCount == 0)
+		if (Input.GetMouseButtonDown(0) && !isShooting && activeWeapon > 0 && burstShotCount == 0)
 		{
 			isShooting = true;
 			ShootWeapon(activeWeapon);
 		}
-		else if (isShooting && Input.GetAxisRaw(shootButton) == 0)
+		else if (isShooting)
 		{
 			isShooting = false;
 		}
 		// Handle relad weapon action.
-		else if (Input.GetButtonUp(reloadButton) && activeWeapon > 0)
+		else if (Input.GetKeyDown(reloadButton) && activeWeapon > 0)
 		{
 			if (weapons[activeWeapon].StartReload())
 			{
@@ -128,7 +128,7 @@ public class ShootBehaviour : GenericBehaviour
 			}
 		}
 		// Handle drop weapon action.
-		else if (Input.GetButtonDown(dropButton) && activeWeapon > 0)
+		else if (Input.GetKeyDown(dropButton) && activeWeapon > 0)
 		{
 			// End reload paramters, drop weapon and change to another one in inventory.
 			EndReloadWeapon();
@@ -140,16 +140,12 @@ public class ShootBehaviour : GenericBehaviour
 		// Handle change weapon action.
 		else
 		{
-			if ((Input.GetAxisRaw(changeButton) != 0 && !isChangingWeapon))
-			{
-				isChangingWeapon = true;
-				int nextWeapon = activeWeapon + 1;
-				ChangeWeapon(activeWeapon, (nextWeapon) % weapons.Count);
-			}
-			else if (Input.GetAxisRaw(changeButton) == 0)
-			{
-				isChangingWeapon = false;
-			}
+            if (Input.GetKeyDown(changeWeaponButton) && !isChangingWeapon)
+            {
+                isChangingWeapon = true;
+                int nextWeapon = activeWeapon + 1;
+                ChangeWeapon(activeWeapon, (nextWeapon) % weapons.Count);
+            }
 		}
 
 		// Manage shot parameters after shooting action.
@@ -305,7 +301,8 @@ public class ShootBehaviour : GenericBehaviour
 
 		// Set crosshair if armed.
 		SetWeaponCrosshair(newWeapon > 0);
-	}
+        isChangingWeapon = false;
+    }
 
 	// Handle the shot parameters during its lifetime.
 	private void ShotDecay()
@@ -329,7 +326,7 @@ public class ShootBehaviour : GenericBehaviour
 					if (shotDecay <= (0.4f - 2 * Time.deltaTime))
 					{
 						// Auto mode, keep firing while shoot button is pressed.
-						if (weapons[activeWeapon].Mode == WeaponMode.AUTO && Input.GetAxisRaw(shootButton) != 0)
+						if (weapons[activeWeapon].Mode == WeaponMode.AUTO && Input.GetMouseButtonDown(0))
 						{
 							ShootWeapon(activeWeapon);
 						}
