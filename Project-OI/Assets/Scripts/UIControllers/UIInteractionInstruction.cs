@@ -19,6 +19,12 @@ public class UIInteractionInstruction : MonoBehaviour
             case (InteractionType.AmmoBox):
                 instructionText.text = boxMessage + " " + tag + " ammo";
             break;
+            case (InteractionType.OOI):
+                instructionText.text = boxMessage + " " + tag;
+                break;
+            case (InteractionType.RadioSet):
+                instructionText.text = tag;
+                break;
         }
     }
 

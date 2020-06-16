@@ -1,5 +1,4 @@
-﻿using ServiceLocatorSample.ServiceLocator;
-using System;
+﻿using System;
 using UnityEngine;
 
 public class PlayerObjectInteraction : MonoBehaviour
@@ -7,7 +6,7 @@ public class PlayerObjectInteraction : MonoBehaviour
     [SerializeField] ShootBehaviour playerShootBehavior;
     [SerializeField] PlayerInventory playerInventory;
     IInteractable interactiveObject;
-
+   
     public Action<IInteractable> CollisionInteraction;
 
     // Update is called once per frame
@@ -29,7 +28,27 @@ public class PlayerObjectInteraction : MonoBehaviour
             case AmmoBox box:
                 OpenAmmoBox(box);
             break;
+            case MissionObjective objective:
+                PickUpMissionObjective(objective);
+            break;
+            case RadioSet radio:
+                UserRadio(radio);
+            break;
         }
+    }
+
+
+    void UserRadio(RadioSet radioSet)
+    {
+        radioSet.UseRadio(playerInventory.GetObjectiveTags());
+        CollisionInteraction?.Invoke(null);
+    }
+
+    void PickUpMissionObjective(MissionObjective objective)
+    {
+        playerInventory.AddObjectibeTags(objective.GetTag());
+        objective.DestroyObject();
+        CollisionInteraction?.Invoke(null);
     }
 
     void OpenAmmoBox(AmmoBox ammoBox)

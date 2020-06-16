@@ -5,7 +5,10 @@ using UnityEngine;
 public class PlayerInventory : MonoBehaviour
 {
     [SerializeField] int pistolAmmo,rifleAmmo;
+    List<string> objectiveTags = new List<string>();
     WeaponAmmo currentUsedWeapon;
+
+
     public int GetCurrentAmmo(WeaponAmmo weaponType)
     {
         int ammo = weaponType == WeaponAmmo.Pistol ? pistolAmmo : rifleAmmo;
@@ -47,6 +50,17 @@ public class PlayerInventory : MonoBehaviour
     {
         return rifleAmmo;
     }
+
+    public void AddObjectibeTags(string tag)
+    {
+        objectiveTags.Add(tag);
+    }
+
+    public List<string> GetObjectiveTags()
+    {
+        return objectiveTags;
+    }
+
 
 }
 

@@ -186,14 +186,7 @@ public class ShootBehaviour : GenericBehaviour
                     // Call the damage behaviour of target if exists.
                     var takeDamage = hit.collider.gameObject.GetComponent(typeof(ITakeDamage)) as ITakeDamage;
                     if (takeDamage != null)
-                        takeDamage.TakeDamage(weapons[activeWeapon].BulletDamage);
-                    else
-                    {
-                        Debug.Log(hit.collider.gameObject.name);
-                    }
-
-
-                   
+                        takeDamage.TakeDamage(weapons[activeWeapon].BulletDamage); 
 				}
 			}
 			// No target was hit.

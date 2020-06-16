@@ -1,5 +1,4 @@
-﻿using ServiceLocatorSample.ServiceLocator;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SceneController : MonoBehaviour
 {

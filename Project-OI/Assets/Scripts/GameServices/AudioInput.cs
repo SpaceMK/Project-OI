@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using ServiceLocatorSample.ServiceLocator;
 
 public class AudioInput : IGameService
 {

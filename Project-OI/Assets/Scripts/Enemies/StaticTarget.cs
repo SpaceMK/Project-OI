@@ -1,14 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
-public class StaticTarget : MonoBehaviour,ITakeDamage
+public class StaticTarget : MonoBehaviour,ITakeDamage,IEnemy
 { 
     [SerializeField] float targetHealth;
     [SerializeField] MeshRenderer meshRenderer;
     [SerializeField] bool targetEnabled;
-    [SerializeField] Color targetIsDead, targetisAlive;
+    [SerializeField] Color targetIsDead, targetIsAlive;
     Material targetMaterial;
+
+    public Action OnDeath { get; set;}
 
     void Start()
     {
@@ -18,16 +19,18 @@ public class StaticTarget : MonoBehaviour,ITakeDamage
 
     public void TakeDamage(float damage)
     {
-        Debug.Log(damage);
         targetHealth -= damage;
         if (targetHealth <= 0f)
+        {
             ChangeTargetColor(true);
+            OnDeath?.Invoke();
+        }
     }
 
     
     void ChangeTargetColor(bool dead)
     {
-        var color = dead ? targetIsDead : targetisAlive;
+        var color = dead ? targetIsDead : targetIsAlive;
         targetMaterial.color = color;
     }
 }

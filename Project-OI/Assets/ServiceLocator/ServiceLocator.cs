@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace ServiceLocatorSample.ServiceLocator
-{
+
     /// <summary>
     /// Simple service locator for <see cref="IGameService"/> instances.
     /// </summary>
@@ -80,4 +79,3 @@ namespace ServiceLocatorSample.ServiceLocator
             services.Remove(key);
         }
     }
-}

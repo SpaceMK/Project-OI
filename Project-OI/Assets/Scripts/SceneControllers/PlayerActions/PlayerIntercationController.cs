@@ -1,5 +1,4 @@
-﻿using ServiceLocatorSample.ServiceLocator;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerIntercationController : MonoBehaviour
 {
@@ -26,6 +25,12 @@ public class PlayerIntercationController : MonoBehaviour
                 string tag = box.GetAmmoType().ToString().ToLower();
                 uiInstruction.DisplayText(InteractionType.AmmoBox,tag);
                 break;
+            case MissionObjective objective:
+                uiInstruction.DisplayText(InteractionType.OOI, objective.GetDescription());
+                break;
+            case RadioSet radio:
+                uiInstruction.DisplayText(InteractionType.RadioSet, radio.GetRadioUIMessage());
+                break;
         }
         
     }
@@ -36,5 +41,7 @@ public enum InteractionType
 {
     Weapon,
     AmmoBox, 
+    OOI,
+    RadioSet,
     None
 }
